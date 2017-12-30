@@ -8,11 +8,14 @@
 
 import UIKit
 
-struct TestModel:OrzModel{
+struct TestModel{
     var id = 0
     var created_at:Date = Date()
     var title = ""
     
+    
+}
+extension TestModel:OrzModel{
     func primaryKey() -> (String, PrimaryKeyDecorator) {
         return ("id", .autoIncrement)
     }
@@ -20,23 +23,20 @@ struct TestModel:OrzModel{
     func options() -> [String : String]? {
         return nil
     }
-    
-    func fromDictionary(_ obj: [String : Any]) -> OrzModel? {
-        var m = TestModel()
+
+    init?(from dictionary: [String : Any]) {
+        print(dictionary)
         guard
-            let i = obj["id"] as? Int,
-            let c = obj["created_at"] as? Date,
-            let t = obj["title"] as? String
-        else{
-            return nil
+            let i = dictionary["id"] as? Int,
+            let c = dictionary["created_at"] as? Double,
+            let t = dictionary["title"] as? String
+            else{
+                return nil
         }
-        m.id = i
-        m.created_at = c
-        m.title = t
-        return m
+        id = i
+        created_at = Date(timeIntervalSince1970: c)
+        title = t
     }
-    
-    
 }
 
 class ViewController: UIViewController {

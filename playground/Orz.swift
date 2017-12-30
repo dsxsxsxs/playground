@@ -30,20 +30,20 @@ final class Orz {
         dbQueue = dbq
     }
     func transaction(_ fn:@escaping (FMDatabase, UnsafeMutablePointer<ObjCBool>)->Void) {
-//        queue.async { [dbQueue] in
+        queue.async { [dbQueue] in
             dbQueue.inTransaction(fn)
-//        }
+        }
     }
     func database(_ fn:@escaping (FMDatabase)->Void) {
         queue.async { [dbQueue] in
             dbQueue.inDatabase(fn)
         }
     }
-    func execute<M:OrzModel>(update sqls:[String], values:[Any], cb:Callback<M>?=nil) {
+    func execute<M:OrzModel>(update sqls:[String], values:[[Any]], cb:Callback<M>?=nil) {
         transaction{ db, rollback in
             do{
-                for sql in sqls{
-                    try db.executeUpdate(sql, values: values)
+                for (sql, val) in zip(sqls, values){
+                    try db.executeUpdate(sql, values: val)
                 }
                 cb?(.done)
             }catch let err{
@@ -52,14 +52,14 @@ final class Orz {
             }
         }
     }
-    func execute<M:OrzModel>(query sql:String, proto:M, cb:Callback<M>?) {
+    func execute<M:OrzModel>(query sql:String, proto:M.Type, cb:Callback<M>?) {
         database{ db in
             do{
                 let rs = try db.executeQuery(sql, values: nil)
                 var set:[M] = []
                 while rs.next(){
                     if let d = rs.resultDictionary as? [String:Any]{
-                        if let m = proto.fromDictionary(d) as? M{
+                        if let m = proto.init(from: d){
                             set.append(m)
                         }else{
                             throw NSError(domain: "could not convert to Model", code: 4, userInfo: d)
@@ -84,12 +84,13 @@ final class Orz {
     func execute<M:OrzModel>(models:[M], action:CRU, cb:Callback<M>?) {
         queue.async { [weak self] in
             do {
-                var sqls:[String] = [], vals:[Any] = []
+                var sqls:[String] = [], vals:[[Any]] = []
                 for model in models{
                     switch action {
                     case .create:
                         let sql = try model.toSchema()
                         sqls.append(sql)
+                        vals.append([])
                     case .insert:
                         let (sql, val) = try model.toInsert()
                         sqls.append(sql)
@@ -105,6 +106,7 @@ final class Orz {
                     case .drop:
                         let sql = "DROP TABLE `\(type(of: model))`;"
                         sqls.append(sql)
+                        vals.append([])
                     }
                 }
                 self?.execute(update: sqls, values: vals, cb:cb)
@@ -143,8 +145,8 @@ final class Orz {
     func delete<M:OrzModel>(model:M, cb:Callback<M>?) {
         execute(models: [model], action: .delete, cb: cb)
     }
-    func select<M:OrzModel>(from model:M, `where` query:String, orderBy:String?=nil, cb:Callback<M>?) {
-        let sql = "SELECT * FROM \(type(of: model)) WHERE \(query) \(orderBy == nil ? "":"ORDER BY \(orderBy!)");"
+    func select<M:OrzModel>(from model:M.Type, `where` query:String="1", orderBy:String?=nil, cb:Callback<M>?) {
+        let sql = "SELECT * FROM `\(String(describing: model))` WHERE \(query) \(orderBy == nil ? "":"ORDER BY \(orderBy!)");"
         execute(query: sql, proto: model, cb: cb)
     }
 }
@@ -157,7 +159,8 @@ enum PrimaryKeyDecorator:String{
 protocol OrzModel{
     func primaryKey() -> (String, PrimaryKeyDecorator)
     func options() -> [String:String]?
-    func fromDictionary(_ obj:[String:Any]) -> OrzModel?
+    init()
+    init?(from dictionary:[String:Any])
 }
 extension OrzModel{
     
@@ -186,7 +189,6 @@ extension OrzModel{
             String(describing: Data?.self):BLOB,
             
             ]
-        print(String(describing: Date?.self))
         let settings = try mirror.children.map{ property in
             let column = property.label ?? ""
             guard let columnType = toSqlType["\(type(of: property.value))"] else{
@@ -195,7 +197,6 @@ extension OrzModel{
             return "`\(column)` \(columnType) \(opts[column] ?? "")"
             }.joined(separator: ",")
         let sql = "CREATE TABLE IF NOT EXISTS `\(type(of: self))` (\(settings));"
-        print(sql)
         return sql
     }
     func reflect()throws -> (Mirror.Children, [String], [Any]) {
@@ -219,14 +220,9 @@ extension OrzModel{
         return (info, cols, vals)
     }
     func toInsert()throws -> (String, [Any]) {
-        var (info, cols, vals) = try reflect()
+        let (info, cols, vals) = try reflect()
         let count = Int(info.count)
-        let (pk, dec) = primaryKey()
-        if dec == .autoIncrement{
-            cols = cols.filter{ $0 != pk }
-            _ = vals.remove(at: cols.index(of:pk)!)
-        }
-        let sql = "INSERT OR REPLACE INTO `\(type(of: self))` (\(cols.joined(separator: ","))) VALUES (\([String](repeating: "?", count: count - 1).joined(separator: ",")));"
+        let sql = "INSERT OR REPLACE INTO `\(type(of: self))` (\(cols.joined(separator: ","))) VALUES (\([String](repeating: "?", count: count).joined(separator: ",")));"
         return (sql, vals)
     }
     func toUpdate()throws -> (String, [Any])  {

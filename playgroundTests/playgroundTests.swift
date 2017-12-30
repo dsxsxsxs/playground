@@ -39,12 +39,12 @@ class playgroundTests: XCTestCase {
                     orz.insert(model: m) { rs in
                         switch rs{
                         case .failed(let err):
-                            XCTAssert(false, "\(err) failed to create table db")
+                            XCTAssert(false, "\(err) failed to insert row db")
                         case .done:
-                            orz.select(from: TestModel(), where: ""){ rs in
+                            orz.select(from: TestModel.self){ rs in
                                 switch rs{
                                 case .failed(let err):
-                                    XCTAssert(false, "\(err) failed to create table db")
+                                    XCTAssert(false, "\(err) failed to select db")
                                 case .done:
                                     break
                                 case .data(let models):
