@@ -19,6 +19,8 @@
 		A19CBB621FEC08B800686CDB /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19CBB611FEC08B800686CDB /* FMDB.framework */; };
 		A19CBB641FEC196700686CDB /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19CBB611FEC08B800686CDB /* FMDB.framework */; };
 		A19CBB6A1FED841300686CDB /* Orz.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19CBB691FED841300686CDB /* Orz.swift */; };
+		A1DD3D612030D54700D2E649 /* nib.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1DD3D602030D54700D2E649 /* nib.xib */; };
+		A1DD3D632030D7A100D2E649 /* UIRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DD3D622030D7A100D2E649 /* UIRadioButton.swift */; };
 		DA107C1B76A876281602FFAF /* Pods_playgroundTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF1F8568C11CAFC5E6F40C9 /* Pods_playgroundTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +62,8 @@
 		A19CBB611FEC08B800686CDB /* FMDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FMDB.framework; path = Carthage/Build/iOS/FMDB.framework; sourceTree = "<group>"; };
 		A19CBB691FED841300686CDB /* Orz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orz.swift; sourceTree = "<group>"; };
 		A19CBB6B1FEE23FF00686CDB /* playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = playground.playground; path = playground/playground.playground; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		A1DD3D602030D54700D2E649 /* nib.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = nib.xib; sourceTree = "<group>"; };
+		A1DD3D622030D7A100D2E649 /* UIRadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRadioButton.swift; sourceTree = "<group>"; };
 		B011A5861B55F2C1A8EF1F8D /* Pods-playgroundTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-playgroundTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-playgroundTests/Pods-playgroundTests.release.xcconfig"; sourceTree = "<group>"; };
 		B5A5BAA293A119B752DF272D /* Pods-playground.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-playground.debug.xcconfig"; path = "Pods/Target Support Files/Pods-playground/Pods-playground.debug.xcconfig"; sourceTree = "<group>"; };
 		E4FF5A69D1D02381442FB003 /* Pods-playgroundTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-playgroundTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-playgroundTests/Pods-playgroundTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -143,6 +147,8 @@
 				A19CBB391FEC075A00686CDB /* Assets.xcassets */,
 				A19CBB3B1FEC075A00686CDB /* LaunchScreen.storyboard */,
 				A19CBB3E1FEC075A00686CDB /* Info.plist */,
+				A1DD3D602030D54700D2E649 /* nib.xib */,
+				A1DD3D622030D7A100D2E649 /* UIRadioButton.swift */,
 			);
 			path = playground;
 			sourceTree = "<group>";
@@ -294,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A19CBB3D1FEC075A00686CDB /* LaunchScreen.storyboard in Resources */,
+				A1DD3D612030D54700D2E649 /* nib.xib in Resources */,
 				A19CBB3A1FEC075A00686CDB /* Assets.xcassets in Resources */,
 				A19CBB381FEC075A00686CDB /* Main.storyboard in Resources */,
 			);
@@ -489,6 +496,7 @@
 				A19CBB351FEC075A00686CDB /* ViewController.swift in Sources */,
 				A19CBB331FEC075A00686CDB /* AppDelegate.swift in Sources */,
 				A19CBB6A1FED841300686CDB /* Orz.swift in Sources */,
+				A1DD3D632030D7A100D2E649 /* UIRadioButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

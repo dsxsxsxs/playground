@@ -35,7 +35,8 @@ class playgroundTests: XCTestCase {
                 case .failed(let err):
                     XCTAssert(false, "\(err) failed to create table db")
                 case .done:
-                    let m = TestModel(id:0, created_at: Date(), title: "fefef")
+                    
+                    let m = TestModel(id:0, created_at: Date(), title: "fefef", data: "empty".data(using: .utf8)!)
                     orz.insert(model: m) { rs in
                         switch rs{
                         case .failed(let err):

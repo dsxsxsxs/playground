@@ -4,6 +4,15 @@ import UIKit
 import dsxs
 //import FMDB
 
+struct strct{
+    var x = 5
+}
+
+var sa = strct()
+var oa:strct! = sa
+sa.x = 8
+oa.x = 2
+print(sa)
 protocol OrzModel{
     func primaryKey()->String
     func options()->[String:String]?

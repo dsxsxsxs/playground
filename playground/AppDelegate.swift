@@ -9,16 +9,18 @@
 import UIKit
 import FMDB
 import dsxs
+import WebKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    lazy var webViewProcessPool:WKProcessPool? = {
+       return WKProcessPool()
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        _ = FMDatabaseQueue(path: "")
         
         return true
     }
