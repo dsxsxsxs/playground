@@ -16,9 +16,35 @@ final class Orz {
         case done
         case failed(with:Error)
     }
+    class RollbackBool{
+        weak var db:FMDatabase?
+        var isRollbacked = false
+        var should = false{
+            didSet{
+                guard should, !isRollbacked else{
+                    return
+                }
+                if let rb = rollback{
+                    rb.pointee = true
+                }else{
+                    db?.rollback()
+                }
+                isRollbacked = true
+            }
+        }
+        var rollback:UnsafeMutablePointer<ObjCBool>?
+        init(_ db:FMDatabase){
+            self.db = db
+        }
+        init(_ ptr:UnsafeMutablePointer<ObjCBool>) {
+            rollback = ptr
+        }
+    }
     
+    var db:FMDatabase?
     let queue:DispatchQueue
     let dbQueue:FMDatabaseQueue
+    let group:DispatchGroup
     
     init?(name:String, use q:DispatchQueue? = nil) {
         guard
@@ -28,16 +54,40 @@ final class Orz {
         }
         queue = q ?? DispatchQueue(label: "me.dsxs.orz.dispatch", attributes: .concurrent)
         dbQueue = dbq
+        group = DispatchGroup()
     }
-    func transaction(_ fn:@escaping (FMDatabase, UnsafeMutablePointer<ObjCBool>)->Void) {
-        queue.async { [dbQueue] in
-            dbQueue.inTransaction(fn)
+    
+    func write(_ fn: @escaping (Orz, RollbackBool)->Void)  {
+        queue.async(group:group) { [dbQueue] in
+            dbQueue.inTransaction{ (db, rollback) in
+                let wrap = RollbackBool(rollback)
+                self.db = db
+                fn(self, wrap)
+                self.db = nil
+            }
         }
+    }
+    
+    func transaction(_ fn:@escaping (FMDatabase, RollbackBool)->Void) {
+        guard let db = self.db else{
+            queue.async(group:group) { [dbQueue] in
+                dbQueue.inTransaction{ db, rollback in
+                    let wrap = RollbackBool(rollback)
+                    fn(db, wrap)
+                }
+            }
+            return
+        }
+        fn(db, RollbackBool(db))
     }
     func database(_ fn:@escaping (FMDatabase)->Void) {
-        queue.async { [dbQueue] in
-            dbQueue.inDatabase(fn)
+        guard let db = self.db else{
+            queue.async { [dbQueue] in
+                dbQueue.inDatabase(fn)
+            }
+            return
         }
+        fn(db)
     }
     func execute<M:OrzModel>(update sqls:[String], values:[[Any]], cb:Callback<M>?=nil) {
         transaction{ db, rollback in
@@ -47,7 +97,7 @@ final class Orz {
                 }
                 cb?(.done)
             }catch let err{
-                rollback.pointee = true
+                rollback.should = true
                 cb?(.failed(with: err))
             }
         }
@@ -201,13 +251,19 @@ extension OrzModel{
     }
     func reflect()throws -> (Mirror.Children, [String], [Any]) {
         let info = Mirror(reflecting: self).children
-        let cols:[String] = try info.map{ property in
+        let (pk, decorator) = primaryKey()
+        var cols:[String] = try info.map{ property in
             guard let column = property.label else{
                 throw NSError(domain: "", code: 0, userInfo: nil)
             }
             return column
         }
-        let vals:[Any] = info.map{ property in
+//        var pkIdx:Int?
+//        if case .autoIncrement = decorator{
+//            pkIdx = cols.index{ $0 == pk }
+//            cols = cols.filter{ $0 != pk }
+//        }
+        var vals:[Any] = info.map{ property in
             let m = Mirror(reflecting: property.value)
             if m.displayStyle == .optional{
                 if let v = m.children.first?.value{
@@ -217,6 +273,9 @@ extension OrzModel{
             }
             return property.value
         }
+//        if let i = pkIdx{
+//            vals.remove(at: i)
+//        }
         return (info, cols, vals)
     }
     func toInsert()throws -> (String, [Any]) {
