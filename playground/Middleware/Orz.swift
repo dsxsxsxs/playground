@@ -219,9 +219,9 @@ extension OrzModel{
         var opts:[String:String] = self.options() ?? [:]
         let (pk, decorator) = primaryKey()
         if let pkopt = opts[pk]{
-            opts[pk] = "PRIMARY KEY\(decorator.rawValue) NOT NULL \(pkopt)"
+            opts[pk] = "PRIMARY KEY \(decorator.rawValue) \(pkopt)"
         }else{
-            opts[pk] = "PRIMARY KEY\(decorator.rawValue) NOT NULL"
+            opts[pk] = "PRIMARY KEY \(decorator.rawValue)"
         }
         let INTEGER = "INTEGER", BOOL = "BOOL", TEXT = "TEXT", REAL = "REAL", DATETIME = "DATETIME", BLOB = "BLOB"
         let toSqlType:[String:String] = [
@@ -251,8 +251,8 @@ extension OrzModel{
     }
     func reflect()throws -> (Mirror.Children, [String], [Any]) {
         let info = Mirror(reflecting: self).children
-        let (pk, decorator) = primaryKey()
-        var cols:[String] = try info.map{ property in
+//        let (pk, _) = primaryKey()
+        let cols:[String] = try info.map{ property in
             guard let column = property.label else{
                 throw NSError(domain: "", code: 0, userInfo: nil)
             }
@@ -263,7 +263,7 @@ extension OrzModel{
 //            pkIdx = cols.index{ $0 == pk }
 //            cols = cols.filter{ $0 != pk }
 //        }
-        var vals:[Any] = info.map{ property in
+        let vals:[Any] = info.map{ property in
             let m = Mirror(reflecting: property.value)
             if m.displayStyle == .optional{
                 if let v = m.children.first?.value{
