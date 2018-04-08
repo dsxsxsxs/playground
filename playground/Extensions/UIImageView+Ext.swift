@@ -10,22 +10,19 @@ import UIKit
 import ObjectiveC
 
 extension UIImageView{
-    static var imageTaskGroup = DispatchGroup()
-    var lastTask:URLSessionDataTask? {
+    static var lastTaskIDKey = "dataTask"
+    var lastTaskID:Int? {
         get{
-            return objc_getAssociatedObject(self, "dataTask") as? URLSessionDataTask
+            return objc_getAssociatedObject(self, &UIImageView.lastTaskIDKey) as? Int
         }
         set{
             if let task = newValue{
-                objc_setAssociatedObject(self, "dataTask", task, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            }else{
-                objc_setAssociatedObject(self, "dataTask", nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                objc_setAssociatedObject(self, &UIImageView.lastTaskIDKey, task, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
         }
     }
     func setImage(from url: String, completed cb:(()->Void)?=nil) {
         guard let u = URL(string: url) else{ return }
-        lastTask?.cancel()
         let indicator = UIActivityIndicatorView()
         addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
@@ -38,20 +35,30 @@ extension UIImageView{
             NSLayoutConstraint(item: indicator, attribute: .height, relatedBy: .equal, toItem: indicator, attribute: .width, multiplier: 1, constant: 0),
         ])
         indicator.startAnimating()
-        lastTask = URLSession(configuration: .default).dataTask(with: u) {[weak self] data, resp, err in
+        var task:URLSessionDataTask!
+        task = URLSession.shared.dataTask(with: u) { data, resp, err in
+//            print("this:", task.hashValue, "last:", self.lastTaskID)
             if let e = err{
                 print(e)
-            }else if let d = data{
+            }else if let d = data,
+                     let lastID = self.lastTaskID,
+                     let t = task,
+                     lastID == t.hashValue{
                 let img = UIImage(data: d)
                 DispatchQueue.main.async {
-                    self?.image = img
-                    indicator.removeFromSuperview()
+                    self.image = img
                     cb?()
                 }
             }
+            DispatchQueue.main.async {
+                indicator.removeFromSuperview()
+            }
+            task = nil
         }
-        DispatchQueue.global().async(group: UIImageView.imageTaskGroup){ [weak lastTask] in
-            lastTask?.resume()
+        lastTaskID = task.hashValue
+//        print("dispatched:", lastTaskID)
+        DispatchQueue.global().async{
+            task.resume()
         }
     }
 }

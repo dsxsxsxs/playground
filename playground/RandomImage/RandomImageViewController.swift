@@ -24,8 +24,9 @@ class RandomImageViewController: UITableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! RandomImageViewCell
-        let url = "https://picsum.photos/350/\((350..<350).random)/?random"
+        let url = "https://picsum.photos/350/\((350..<350).random)/?image=\(indexPath.row)"
         cell.img.setImage(from: url){
+            
         }
         cell.lbl.text = url
         return cell
