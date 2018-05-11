@@ -9,6 +9,15 @@
 import Foundation
 import FMDB
 
+protocol OptionalProtocol {
+    // the metatype value for the wrapped type.
+    static var wrappedType: Any.Type { get }
+}
+
+extension Optional : OptionalProtocol {
+    static var wrappedType: Any.Type { return Wrapped.self }
+}
+
 final class Orz {
     typealias Callback<M> = (Result<M>)->Void
     enum Result<M>{
@@ -49,8 +58,9 @@ final class Orz {
     init?(name:String, use q:DispatchQueue? = nil) {
         guard
             let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path,
-            let dbq = FMDatabaseQueue(path: "\(path)/\(name).db") else{
-            return nil
+            let dbq = FMDatabaseQueue(path: "\(path)/\(name).db")
+            else{
+                return nil
         }
         queue = q ?? DispatchQueue(label: "me.dsxs.orz.dispatch", attributes: .concurrent)
         dbQueue = dbq
@@ -108,12 +118,10 @@ final class Orz {
                 let rs = try db.executeQuery(sql, values: nil)
                 var set:[M] = []
                 while rs.next(){
-                    if let d = rs.resultDictionary as? [String:Any]{
-                        if let m = proto.init(from: d){
-                            set.append(m)
-                        }else{
-                            throw NSError(domain: "could not convert to Model", code: 4, userInfo: d)
-                        }
+                    if let m = proto.init(fromResultSet: rs){
+                        set.append(m)
+                    }else{
+                        throw NSError(domain: "could not convert to Model", code: 4, userInfo: rs.resultDictionary as? [String:Any])
                     }
                 }
                 cb?(.data(set))
@@ -154,7 +162,7 @@ final class Orz {
                         sqls.append(sql)
                         vals.append(val)
                     case .drop:
-                        let sql = "DROP TABLE `\(type(of: model))`;"
+                        let sql = "DROP TABLE `\(type(of: model).table.rawValue)`;"
                         sqls.append(sql)
                         vals.append([])
                     }
@@ -196,7 +204,7 @@ final class Orz {
         execute(models: [model], action: .delete, cb: cb)
     }
     func select<M:OrzModel>(from model:M.Type, `where` query:String="1", orderBy:String?=nil, cb:Callback<M>?) {
-        let sql = "SELECT * FROM `\(String(describing: model))` WHERE \(query) \(orderBy == nil ? "":"ORDER BY \(orderBy!)");"
+        let sql = "SELECT * FROM `\(model.table.rawValue)` WHERE \(query) \(orderBy == nil ? "":"ORDER BY \(orderBy!)");"
         execute(query: sql, proto: model, cb: cb)
     }
 }
@@ -205,19 +213,31 @@ enum PrimaryKeyDecorator:String{
     case none = ""
     case autoIncrement = " AUTOINCREMENT"
 }
-
-protocol OrzModel{
-    func primaryKey() -> (String, PrimaryKeyDecorator)
-    func options() -> [String:String]?
-    init()
-    init?(from dictionary:[String:Any])
+enum Table:String{
+    case account = "account"
 }
+protocol OrzModel{
+    static var table:Table { get }
+    static var primaryKey:(String, PrimaryKeyDecorator) { get }
+    init()
+    init?(fromResultSet:FMResultSet)
+}
+
+protocol OrzModelStringConvertible: Codable{
+    func description()->String
+}
+extension OrzModelStringConvertible{
+    func description() -> String {
+        return (try? String(data: JSONEncoder().encode(self), encoding: .utf8) ?? "") ?? ""
+    }
+}
+
 extension OrzModel{
     
     func toSchema()throws ->String {
         let mirror = Mirror(reflecting: self)
-        var opts:[String:String] = self.options() ?? [:]
-        let (pk, decorator) = primaryKey()
+        var opts:[String:String] = [:]
+        let (pk, decorator) = Self.primaryKey
         if let pkopt = opts[pk]{
             opts[pk] = "PRIMARY KEY \(decorator.rawValue) \(pkopt)"
         }else{
@@ -227,76 +247,110 @@ extension OrzModel{
         let toSqlType:[String:String] = [
             String(describing: Int.self): INTEGER,
             String(describing: Int?.self):INTEGER,
+            String(describing: ImplicitlyUnwrappedOptional<Int>.self):INTEGER,
             String(describing: Bool.self): BOOL,
             String(describing: Bool?.self):BOOL,
+            String(describing: ImplicitlyUnwrappedOptional<Bool>.self):BOOL,
             String(describing: String.self): TEXT,
             String(describing: String?.self):TEXT,
+            String(describing: ImplicitlyUnwrappedOptional<String>.self):TEXT,
             String(describing: Double.self): REAL,
             String(describing: Double?.self):REAL,
+            String(describing: ImplicitlyUnwrappedOptional<Double>.self):REAL,
             String(describing: Date.self): DATETIME,
             String(describing: Date?.self):DATETIME,
+            String(describing: ImplicitlyUnwrappedOptional<Date>.self):DATETIME,
             String(describing: Data.self): BLOB,
             String(describing: Data?.self):BLOB,
+            String(describing: ImplicitlyUnwrappedOptional<Data>.self):BLOB,
             
             ]
-        let settings = try mirror.children.map{ property in
+        let settings = try mirror.children.map{ property ->String in
             let column = property.label ?? ""
-            guard let columnType = toSqlType["\(type(of: property.value))"] else{
-                throw NSError(domain: "Orz Invalid Column Type", code: 7, userInfo: nil)
+            if let columnType = toSqlType["\(type(of: property.value))"]{
+                return "`\(column)` \(columnType) \(opts[column] ?? "")"
             }
-            return "`\(column)` \(columnType) \(opts[column] ?? "")"
+            print(type(of: property.value))
+            let m = Mirror(reflecting: property.value)
+            print( m.subjectType )
+            // if fieldMirror.subjectType returns an optional metatype value
+            // (i.e an Optional<Wrapped>.Type), we can cast to OptionalProtocol.Type,
+            // and then get the Wrapped type, otherwise default to fieldMirror.subjectType
+            let wrappedType = (m.subjectType as? OptionalProtocol.Type)?.wrappedType
+                ?? m.subjectType
+            if wrappedType is OrzModelStringConvertible.Type{
+                return "`\(column)` TEXT \(opts[column] ?? "")"
+            }
+            if let _ = property.value as? OrzModelStringConvertible{
+                return "`\(column)` TEXT \(opts[column] ?? "")"
+            }
+            print(column, property)
+            throw NSError(domain: "Orz Invalid Column Type", code: 7, userInfo: nil)
+            
             }.joined(separator: ",")
-        let sql = "CREATE TABLE IF NOT EXISTS `\(type(of: self))` (\(settings));"
+        let sql = "CREATE TABLE IF NOT EXISTS `\(Self.table.rawValue)` (\(settings));"
         return sql
     }
     func reflect()throws -> (Mirror.Children, [String], [Any]) {
         let info = Mirror(reflecting: self).children
-//        let (pk, _) = primaryKey()
+        //        let (pk, _) = primaryKey()
         let cols:[String] = try info.map{ property in
             guard let column = property.label else{
                 throw NSError(domain: "", code: 0, userInfo: nil)
             }
             return column
         }
-//        var pkIdx:Int?
-//        if case .autoIncrement = decorator{
-//            pkIdx = cols.index{ $0 == pk }
-//            cols = cols.filter{ $0 != pk }
-//        }
+        //        var pkIdx:Int?
+        //        if case .autoIncrement = decorator{
+        //            pkIdx = cols.index{ $0 == pk }
+        //            cols = cols.filter{ $0 != pk }
+        //        }
         let vals:[Any] = info.map{ property in
+            if let v = property.value as? OrzModelStringConvertible{
+                return v.description()
+            }
             let m = Mirror(reflecting: property.value)
-            if m.displayStyle == .optional{
+            let wrappedType = (m.subjectType as? OptionalProtocol.Type)?.wrappedType
+                ?? m.subjectType
+            if wrappedType is OrzModelStringConvertible.Type{
+                if let v = m.children.first?.value as? OrzModelStringConvertible{
+                    return v.description()
+                }
+                return NSNull()
+            }
+            if m.displayStyle == .optional || m.displayStyle == .enum{
                 if let v = m.children.first?.value{
                     return v
                 }
                 return NSNull()
             }
+            
             return property.value
         }
-//        if let i = pkIdx{
-//            vals.remove(at: i)
-//        }
+        //        if let i = pkIdx{
+        //            vals.remove(at: i)
+        //        }
         return (info, cols, vals)
     }
     func toInsert()throws -> (String, [Any]) {
         let (info, cols, vals) = try reflect()
         let count = Int(info.count)
-        let sql = "INSERT OR REPLACE INTO `\(type(of: self))` (\(cols.joined(separator: ","))) VALUES (\([String](repeating: "?", count: count).joined(separator: ",")));"
+        let sql = "INSERT OR REPLACE INTO `\(Self.table.rawValue)` (\(cols.joined(separator: ","))) VALUES (\([String](repeating: "?", count: count).joined(separator: ",")));"
         return (sql, vals)
     }
     func toUpdate()throws -> (String, [Any])  {
         var  (_, cols, vals) = try reflect()
-        let (pkey, _) = primaryKey()
+        let (pkey, _) = Self.primaryKey
         let pk = vals.remove(at: cols.index(of:pkey)!)
         vals.append(pk)
-        let sql = "UPDATE `\(type(of: self))` SET \(cols.filter{ $0 != pkey }.map{ "`\($0)` = ?"}.joined(separator: ",")) WHERE `\(pkey)` = ?;"
+        let sql = "UPDATE `\(Self.table.rawValue)` SET \(cols.filter{ $0 != pkey }.map{ "`\($0)` = ?"}.joined(separator: ",")) WHERE `\(pkey)` = ?;"
         return (sql, vals)
     }
     func toDelete()throws -> (String, [Any])  {
         let  (_, cols, vals) = try reflect()
-        let (pkey, _) = primaryKey()
+        let (pkey, _) = Self.primaryKey
         let pk = vals[cols.index(of:pkey)!]
-        let sql = "DELETE FROM `\(type(of: self))` WHERE `\(pkey)` = ?;"
+        let sql = "DELETE FROM `\(Self.table.rawValue)` WHERE `\(pkey)` = ?;"
         return (sql, [pk])
     }
     
