@@ -14,6 +14,13 @@
 		14F78FAB2077439600994E75 /* RandomImageViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14F78FA620772EA300994E75 /* RandomImageViewCell.xib */; };
 		14F78FAE207744C700994E75 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F78FAD207744C700994E75 /* UIImage+Ext.swift */; };
 		14F78FB02077459300994E75 /* UIImageView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F78FAF2077459300994E75 /* UIImageView+Ext.swift */; };
+		A1455FA7224F4BD7001E69CB /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1455FA5224F4BD7001E69CB /* ChatViewController.swift */; };
+		A1455FA8224F4BD7001E69CB /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1455FA6224F4BD7001E69CB /* ChatViewController.xib */; };
+		A1455FAB224F4D96001E69CB /* ChatViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1455FA9224F4D96001E69CB /* ChatViewCell.swift */; };
+		A1455FAC224F4D96001E69CB /* ChatViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1455FAA224F4D96001E69CB /* ChatViewCell.xib */; };
+		A1455FAF224F875F001E69CB /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1455FAD224F875F001E69CB /* MessageInputView.swift */; };
+		A1455FB0224F875F001E69CB /* MessageInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1455FAE224F875F001E69CB /* MessageInputView.xib */; };
+		A1455FB2224F8BF9001E69CB /* ChatViewOwnCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1455FB1224F8BF9001E69CB /* ChatViewOwnCell.xib */; };
 		A19CBB331FEC075A00686CDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19CBB321FEC075A00686CDB /* AppDelegate.swift */; };
 		A19CBB351FEC075A00686CDB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19CBB341FEC075A00686CDB /* ViewController.swift */; };
 		A19CBB381FEC075A00686CDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A19CBB361FEC075A00686CDB /* Main.storyboard */; };
@@ -26,6 +33,7 @@
 		A19CBB6A1FED841300686CDB /* Orz.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19CBB691FED841300686CDB /* Orz.swift */; };
 		A1DD3D612030D54700D2E649 /* nib.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1DD3D602030D54700D2E649 /* nib.xib */; };
 		A1DD3D632030D7A100D2E649 /* UIRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DD3D622030D7A100D2E649 /* UIRadioButton.swift */; };
+		A1FCCE8120AC86760057D6F0 /* AsyncTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1FCCE8020AC86760057D6F0 /* AsyncTask.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +61,13 @@
 		14F78FA820772F4000994E75 /* RandomImageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomImageViewCell.swift; sourceTree = "<group>"; };
 		14F78FAD207744C700994E75 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		14F78FAF2077459300994E75 /* UIImageView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Ext.swift"; sourceTree = "<group>"; };
+		A1455FA5224F4BD7001E69CB /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		A1455FA6224F4BD7001E69CB /* ChatViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
+		A1455FA9224F4D96001E69CB /* ChatViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewCell.swift; sourceTree = "<group>"; };
+		A1455FAA224F4D96001E69CB /* ChatViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatViewCell.xib; sourceTree = "<group>"; };
+		A1455FAD224F875F001E69CB /* MessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputView.swift; sourceTree = "<group>"; };
+		A1455FAE224F875F001E69CB /* MessageInputView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageInputView.xib; sourceTree = "<group>"; };
+		A1455FB1224F8BF9001E69CB /* ChatViewOwnCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatViewOwnCell.xib; sourceTree = "<group>"; };
 		A19CBB2F1FEC075A00686CDB /* playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19CBB321FEC075A00686CDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A19CBB341FEC075A00686CDB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -71,6 +86,7 @@
 		A19CBB6B1FEE23FF00686CDB /* playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = playground.playground; path = playground/playground.playground; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A1DD3D602030D54700D2E649 /* nib.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = nib.xib; sourceTree = "<group>"; };
 		A1DD3D622030D7A100D2E649 /* UIRadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRadioButton.swift; sourceTree = "<group>"; };
+		A1FCCE8020AC86760057D6F0 /* AsyncTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncTask.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				A19CBB691FED841300686CDB /* Orz.swift */,
+				A1FCCE8020AC86760057D6F0 /* AsyncTask.swift */,
 			);
 			path = Middleware;
 			sourceTree = "<group>";
@@ -146,6 +163,20 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A1455FA4224F4BB3001E69CB /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				A1455FA5224F4BD7001E69CB /* ChatViewController.swift */,
+				A1455FA9224F4D96001E69CB /* ChatViewCell.swift */,
+				A1455FAA224F4D96001E69CB /* ChatViewCell.xib */,
+				A1455FB1224F8BF9001E69CB /* ChatViewOwnCell.xib */,
+				A1455FA6224F4BD7001E69CB /* ChatViewController.xib */,
+				A1455FAD224F875F001E69CB /* MessageInputView.swift */,
+				A1455FAE224F875F001E69CB /* MessageInputView.xib */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		A19CBB261FEC075900686CDB = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +201,7 @@
 		A19CBB311FEC075A00686CDB /* playground */ = {
 			isa = PBXGroup;
 			children = (
+				A1455FA4224F4BB3001E69CB /* Chat */,
 				14BA9A8920774C4100D0342D /* MainNavigation */,
 				14BA9A8820774BE700D0342D /* Middleware */,
 				14BA9A8720774BC300D0342D /* ModelTest */,
@@ -280,15 +312,18 @@
 				TargetAttributes = {
 					A19CBB2E1FEC075A00686CDB = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+						LastSwiftMigration = 1010;
+						ProvisioningStyle = Manual;
 					};
 					A19CBB421FEC075A00686CDB = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						TestTargetID = A19CBB2E1FEC075A00686CDB;
 					};
 					A19CBB4D1FEC075A00686CDB = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						TestTargetID = A19CBB2E1FEC075A00686CDB;
 					};
@@ -321,9 +356,13 @@
 			files = (
 				A19CBB3D1FEC075A00686CDB /* LaunchScreen.storyboard in Resources */,
 				A1DD3D612030D54700D2E649 /* nib.xib in Resources */,
+				A1455FA8224F4BD7001E69CB /* ChatViewController.xib in Resources */,
 				A19CBB3A1FEC075A00686CDB /* Assets.xcassets in Resources */,
 				A19CBB381FEC075A00686CDB /* Main.storyboard in Resources */,
+				A1455FB0224F875F001E69CB /* MessageInputView.xib in Resources */,
 				14F78FAB2077439600994E75 /* RandomImageViewCell.xib in Resources */,
+				A1455FAC224F4D96001E69CB /* ChatViewCell.xib in Resources */,
+				A1455FB2224F8BF9001E69CB /* ChatViewOwnCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,15 +406,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1FCCE8120AC86760057D6F0 /* AsyncTask.swift in Sources */,
+				A1455FAF224F875F001E69CB /* MessageInputView.swift in Sources */,
 				14BA9A862077490F00D0342D /* Range+Ext.swift in Sources */,
 				14F78FB02077459300994E75 /* UIImageView+Ext.swift in Sources */,
 				14BA9A8B20774C8000D0342D /* MainTabbarController.swift in Sources */,
 				14F78FAE207744C700994E75 /* UIImage+Ext.swift in Sources */,
 				A19CBB351FEC075A00686CDB /* ViewController.swift in Sources */,
 				14F78FAA2077438F00994E75 /* RandomImageViewCell.swift in Sources */,
+				A1455FAB224F4D96001E69CB /* ChatViewCell.swift in Sources */,
 				A19CBB331FEC075A00686CDB /* AppDelegate.swift in Sources */,
 				A19CBB6A1FED841300686CDB /* Orz.swift in Sources */,
 				A1DD3D632030D7A100D2E649 /* UIRadioButton.swift in Sources */,
+				A1455FA7224F4BD7001E69CB /* ChatViewController.swift in Sources */,
 				14F78FA420772DF100994E75 /* RandomImageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,17 +589,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 495SP6H884;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = XDVDZYF45U;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = playground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jp.winas.playground;
+				PRODUCT_BUNDLE_IDENTIFIER = me.dsxs.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				PROVISIONING_PROFILE_SPECIFIER = provisioning_dev;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -565,17 +609,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 495SP6H884;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = XDVDZYF45U;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = playground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jp.winas.playground;
+				PRODUCT_BUNDLE_IDENTIFIER = me.dsxs.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				PROVISIONING_PROFILE_SPECIFIER = provisioning_prod;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -595,7 +641,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.winas.playgroundTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/playground.app/playground";
 			};
@@ -616,7 +662,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.winas.playgroundTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/playground.app/playground";
 			};
@@ -632,7 +678,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.winas.playgroundUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = playground;
 			};
@@ -648,7 +694,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.winas.playgroundUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = playground;
 			};

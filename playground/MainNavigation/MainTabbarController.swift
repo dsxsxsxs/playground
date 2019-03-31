@@ -16,11 +16,14 @@ class MainTabbarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tab1 = RandomImageViewController()
+        let tab1 = UINavigationController(rootViewController: RandomImageViewController())
         tab1.tabBarItem.title = "RI"
-        let tab2 = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController")
+        let tab2 = UINavigationController(rootViewController: UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController"))
         tab2.tabBarItem.title = "VC"
-        setViewControllers([tab1, tab2], animated: false)
+        let tab3 = UINavigationController(rootViewController: ChatViewController())
+        tab3.tabBarItem.title = "RI"
+
+        setViewControllers([tab1, tab2, tab3], animated: false)
 
     }
     

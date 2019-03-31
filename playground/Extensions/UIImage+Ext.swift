@@ -8,6 +8,19 @@
 
 import UIKit
 
+protocol NibInitializable {
+    
+}
+
+extension NibInitializable where Self: UIView {
+    init(owner: Any?, options: [UINib.OptionsKey : Any]? = nil) {
+        self = Bundle(for: Self.self).loadNibNamed(String(describing: Self.self), owner: owner, options: options)?[0] as! Self
+    }
+}
+
+extension UIView: NibInitializable {
+}
+
 extension UIImage {
     
     class func image(with color: UIColor, size: CGSize) -> UIImage {
@@ -25,7 +38,7 @@ extension UIImage {
     }
     
     var pngBase64Encoded:String?{
-        let data = UIImagePNGRepresentation(self)
+        let data = self.pngData()
         return data?.base64EncodedString(options: .lineLength64Characters)
     }
 }

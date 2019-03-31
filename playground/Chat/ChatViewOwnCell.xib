@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="214" id="pmh-ni-Zoa" customClass="ChatViewOwnCell" customModule="playground" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="392" height="214"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pmh-ni-Zoa" id="j9Q-6H-h3x">
+                <rect key="frame" x="0.0" y="0.0" width="392" height="213.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iRB-aY-XTD">
+                        <rect key="frame" x="127.5" y="8" width="254.5" height="197.5"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D2Q-O2-TGE">
+                                <rect key="frame" x="8" y="8" width="238.5" height="181.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.08327225596" green="0.40232664350000003" blue="0.69890254740000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="D2Q-O2-TGE" firstAttribute="centerY" secondItem="iRB-aY-XTD" secondAttribute="centerY" id="2zN-lz-kQm"/>
+                            <constraint firstItem="D2Q-O2-TGE" firstAttribute="height" secondItem="iRB-aY-XTD" secondAttribute="height" constant="-16" id="8fH-77-I3k"/>
+                            <constraint firstItem="D2Q-O2-TGE" firstAttribute="centerX" secondItem="iRB-aY-XTD" secondAttribute="centerX" id="CtC-tf-kzL"/>
+                            <constraint firstItem="D2Q-O2-TGE" firstAttribute="width" secondItem="iRB-aY-XTD" secondAttribute="width" constant="-16" id="EkC-vq-Ux2"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="15"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="iRB-aY-XTD" firstAttribute="width" secondItem="j9Q-6H-h3x" secondAttribute="width" multiplier="0.65" id="Odr-xi-8Zh"/>
+                    <constraint firstItem="iRB-aY-XTD" firstAttribute="top" secondItem="j9Q-6H-h3x" secondAttribute="top" constant="8" id="VTH-Yu-hi0"/>
+                    <constraint firstAttribute="bottom" secondItem="iRB-aY-XTD" secondAttribute="bottom" constant="8" id="gEF-9i-sdc"/>
+                    <constraint firstItem="iRB-aY-XTD" firstAttribute="centerX" secondItem="j9Q-6H-h3x" secondAttribute="centerX" multiplier="1.3" id="gWp-hf-F2P"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="message" destination="D2Q-O2-TGE" id="GTe-bo-aXd"/>
+            </connections>
+            <point key="canvasLocation" x="262.39999999999998" y="219.49025487256372"/>
+        </tableViewCell>
+    </objects>
+</document>
