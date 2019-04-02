@@ -8,6 +8,31 @@
 
 import UIKit
 
+protocol StoryboardInstantiatable {
+
+}
+extension StoryboardInstantiatable where Self: UINavigationController {
+    init(rootViewControllerType: UIViewController.Type, identifier: String? = nil) {
+        if let id = identifier {
+            self = UIStoryboard(name: String(describing: rootViewControllerType), bundle: Bundle(for: rootViewControllerType)).instantiateViewController(withIdentifier: id) as! Self
+            return
+        }
+        self = UIStoryboard(name: String(describing: rootViewControllerType), bundle: Bundle(for: rootViewControllerType)).instantiateInitialViewController() as! Self
+    }
+}
+extension StoryboardInstantiatable where Self: UIViewController {
+    init(name: String? = nil, bundle: Bundle? = nil, identifier: String) {
+        let n = name ?? String(describing: Self.self)
+        let b = bundle ?? Bundle(for: Self.self)
+        guard identifier.isEmpty else {
+            self = UIStoryboard(name: n, bundle: b).instantiateViewController(withIdentifier: identifier) as! Self
+            return
+        }
+        self = UIStoryboard(name: n, bundle: b).instantiateInitialViewController() as! Self
+    }
+}
+
+
 protocol NibInitializable {
     
 }
